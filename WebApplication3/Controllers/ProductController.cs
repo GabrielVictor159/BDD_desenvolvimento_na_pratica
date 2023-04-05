@@ -13,10 +13,10 @@ namespace WebApplication3.Controllers
        
 
         [HttpGet]
-        public ActionResult<Product[]> Get([FromQuery] string? nome = "", [FromQuery] string? filtro = "", [FromQuery] string? sort = "", [FromQuery] int page = 1, [FromQuery] int size = 5)
+        public ActionResult<Product[]> Get([FromQuery] string? nome = null, [FromQuery] string? descricao = null, [FromQuery] int id = -1, [FromQuery] double preco = -1.00, [FromQuery] string? sort = "", [FromQuery] int page = 1, [FromQuery] int size = 5)
         {
 
-            return _productService.Get(nome, filtro, sort, page, size);
+            return _productService.Get(nome, descricao, id, preco, sort, page, size);
 
         }
 

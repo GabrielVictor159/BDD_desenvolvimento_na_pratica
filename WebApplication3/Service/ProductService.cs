@@ -9,14 +9,11 @@ namespace WebApplication3.Service
         public ProductRepository _productrepository = new ProductRepository();
 
 
-        public Product[] Get(string nome = "", string filtro = "", string sort = "", int page = 0, int size = 5)
+        public Product[] Get(string name=null, string Description=null, int id=-1, double price = -1.00, string sort = "", int page = 0, int size = 5)
         {
             Product[] products = _productrepository.products;
-            if (filtro != "" || nome != "")
-            {
-               products = GetFilter(products, filtro, nome);
-
-            }
+          
+               products = GetFilter(products, Description, name, id,price);
             if (sort == "preco")
             {
                 products = getSortPrice(products);
@@ -33,27 +30,26 @@ namespace WebApplication3.Service
 
 
 
-        public Product[] GetFilter(Product[] array, string filter, string name)
+        public Product[] GetFilter(Product[] array, string description, string name, int id, double price)
         {
-            if (name != "")
+            Product[] novoArray = array;
+            if (name != null)
             {
-                Product[] productsByName = array.Where(d => d.Name.ToLower().Contains(name.ToLower())).ToArray();
-                if (filter != "")
-                {
-                    Product[] productsByNameAndFilter = productsByName.Where(d => d.Description.ToLower().Contains(filter)).ToArray();
-                    return productsByNameAndFilter;
-                }
-                else
-                {
-                    return productsByName;
-                }
+                novoArray = novoArray.Where(d => d.Name.ToLower().Contains(name.ToLower())).ToArray();
             }
-            else
+            if(description != null)
             {
-                Product[] productsByFilter = array.Where(d => d.Description.ToLower().Contains(filter.ToLower())).ToArray();
-                return productsByFilter;
+                novoArray = novoArray.Where(d => d.Description.ToLower().Contains(description.ToLower())).ToArray();
             }
-
+            if(id != -1)
+            {
+                novoArray = novoArray.Where(d => d.Id==id).ToArray();
+            }
+            if(price !=-1)
+            {
+                novoArray = novoArray.Where(d => d.Price == price).ToArray();
+            }
+            return novoArray; 
         }
 
         public Product[] getSortPrice(Product[] products)
